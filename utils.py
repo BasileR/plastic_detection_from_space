@@ -139,6 +139,7 @@ def get_RNDVI(folder):
     return (B04-B08)/(B04+B08)
 
 def plot_index(index):
+    plt.figure()
     plt.imshow(index)
     plt.colorbar()
     plt.show()
@@ -146,7 +147,7 @@ def plot_index(index):
 def interpolation_bicubique_multi(A, multi):
   # Effectue l'interpolation multicubique
   if (type(A) != np.ndarray):
-    raise TypeError("L'argument n'est pas un ndarray enculé")
+    raise TypeError("L'argument n'est pas un ndarray")
   m, n = A.shape
   B = np.zeros((m*multi,n*multi))
   for i in range(multi):
