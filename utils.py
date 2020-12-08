@@ -122,7 +122,7 @@ def get_RNDVI(folder):
     -------
     RNDVI : Calcule le RNDVI (Floating Debris Index) et le retourne sous forme
         d'un array de même dimension que arrays en entrée.
-    '''   
+    '''
     required_band = ['B08','B04']
 
     band_dict = get_band(required_band,folder)
