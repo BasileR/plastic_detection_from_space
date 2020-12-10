@@ -50,6 +50,8 @@ def get_band(L,folder):
             if desired_band in raw_band:
                 band_dict[desired_band] = tifffile.imread(os.path.join(path,raw_band))
 
+    band_dict['folder'] = folder
+
     return band_dict
 
 
@@ -165,7 +167,7 @@ def maximize(img, zoom_int):
 def minimize(img, zoom_int):
     return interpolation_bicubique_inverse(img, zoom_int)
 
-def createSel(img):
+def createSel(folder, band_id, index = None , save = True):
     '''
     Parameters
     ----------
@@ -178,6 +180,8 @@ def createSel(img):
     '''
     #cv2.startWindowThread()
     #img = cv2.imread(img)
+    band_dict = get_band(folder)
+    img = band_dict[band_id]
     ROIs = cv2.selectROIs("Select the ROI : Click and drag the mouse (top left to bottom right) and press Enter, or c to cancel", img)
     Coords_list = list()
     #print(ROIs)
@@ -189,10 +193,16 @@ def createSel(img):
         #cv2.destroyAllWindows()
     #print(Coords_list)
     cv2.destroyAllWindows()
+
+    label = create_label(img, coords_list, label_on_source_image)
+
+    if save:
+        path = save_label(label, band_dict['folder'])
+
     return Coords_list
 
 
-def create_label(img, coords_list, label_on_source_image):
+def create_label(img, coords_list, label_on_source_image = False):
     label = np.zeros(img.shape)
     if label_on_source_image:
         label = img.copy()
@@ -200,7 +210,12 @@ def create_label(img, coords_list, label_on_source_image):
         label[coords[0]:coords[1], coords[2]:coords[3]] = 1
     return label
 
-def plot_label_vs_image(image):
+def save_label(label, folder):
+    path = "./data/label/{}_{}.tif".format(folder,'label')
+    tifffile.imsave(path,label)
+    return path
+
+def plot_label_vs_image(image, save = True):
     '''
     Parameters
     ----------
@@ -228,4 +243,8 @@ def plot_label_vs_image(image):
     plt.subplot(2, 2, 4)
     plt.imshow(image+label_dezoomed)
     plt.show()
+
+
+
+
     return label
