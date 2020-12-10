@@ -236,6 +236,14 @@ def create_label(img, coords_list, label_on_source_image = False):
     return label
 
 def save_label(label, folder):
+    '''
+    Params:
+    label : numpy array of zeros and ones, 2-dimensional or 3-dimensional, representing the label
+    folder : string, origin folder name, used to name the labeled image
+
+    Returns:
+    path: string, path to the saved image
+    '''
     path = "./data/label/{}_{}.tif".format(folder,'label')
     tifffile.imsave(path,label)
     return path
