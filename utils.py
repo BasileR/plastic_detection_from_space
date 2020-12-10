@@ -149,24 +149,38 @@ def get_RNDVI(folder):
     return (B04-B08)/(B04+B08)
 
 def plot_index(index):
+    """
+    Parameters:
+    ----------
+    index : numpy array representing an image (2D or 3D, i.e. colored)
+
+    Returns
+    -------
+    None
+
+
+    Takes the index array and plots it using matplotlib.pyplot library,
+    with a colorbar.
+    """
     plt.figure()
     plt.imshow(index)
     plt.colorbar()
     plt.show()
 
-# def interpolation_bicubique_multi(A, multi):
-#     # Effectue l'interpolation multicubique
-#     if (type(A) != np.ndarray):
-#         raise TypeError("L'argument n'est pas un ndarray")
-#     m, n = A.shape
-#     B = np.zeros((m*multi,n*multi))
-#     for i in range(multi):
-#         for j in range(multi):
-#             B[i:B.shape[0]:multi,j:B.shape[1]:multi] = A
-#     return B
 
-def interpolation_bicubique_multi(A, multi):
-    # Effectue l'interpolation multicubique
+def interpolation_multicubique(A, multi):
+    """
+    Parameters:
+    ----------
+    A : numpy array, two-dimensional (m, n) or three-dimensional (m, n, t)
+    multi : integer, representing the coefficient of the interpolation
+
+    Returns
+    -------
+    B : numpy array, with its first two dimensions aumgented by the coefficient
+    multi -> B of dimension (m*multi, n*multi) or (m*multi, n*multi, t) if 3D
+    """
+    
     if (type(A) != np.ndarray):
         raise TypeError("L'argument n'est pas un ndarray")
     if (len(A.shape) == 2):
@@ -195,7 +209,7 @@ def interpolation_bicubique_inverse(A,multi):
 
 
 def maximize(img, zoom_int):
-    return interpolation_bicubique_multi(img, zoom_int)
+    return interpolation_multicubique(img, zoom_int)
 
 def minimize(img, zoom_int):
     return interpolation_bicubique_inverse(img, zoom_int)
