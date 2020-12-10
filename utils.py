@@ -146,20 +146,45 @@ def plot_index(index):
     plt.colorbar()
     plt.show()
 
+# def interpolation_bicubique_multi(A, multi):
+#     # Effectue l'interpolation multicubique
+#     if (type(A) != np.ndarray):
+#         raise TypeError("L'argument n'est pas un ndarray")
+#     m, n = A.shape
+#     B = np.zeros((m*multi,n*multi))
+#     for i in range(multi):
+#         for j in range(multi):
+#             B[i:B.shape[0]:multi,j:B.shape[1]:multi] = A
+#     return B
+
 def interpolation_bicubique_multi(A, multi):
-  # Effectue l'interpolation multicubique
-  if (type(A) != np.ndarray):
-    raise TypeError("L'argument n'est pas un ndarray")
-  m, n = A.shape
-  B = np.zeros((m*multi,n*multi))
-  for i in range(multi):
-    for j in range(multi):
-      B[i:B.shape[0]:multi,j:B.shape[1]:multi] = A
-  return B
+    # Effectue l'interpolation multicubique
+    if (type(A) != np.ndarray):
+        raise TypeError("L'argument n'est pas un ndarray")
+    if (len(A.shape) == 2):
+        m, n = A.shape
+        B = np.zeros((m*multi,n*multi))
+        for i in range(multi):
+            for j in range(multi):
+                 B[i:B.shape[0]:multi,j:B.shape[1]:multi] = A
+        return B
+    elif(len(A.shape) == 3):
+        m, n, t = A.shape
+        B = np.zeros((m*multi,n*multi,t))
+        for k in range(t):
+            for i in range(multi):
+                for j in range(multi):
+                     B[i:B.shape[0]:multi,j:B.shape[1]:multi,k] = A[:,:,k]
+        return B
+
 
 def interpolation_bicubique_inverse(A,multi):
-  # Effectue l'interpolation multicarrée inverse
-  return A[0:A.shape[0]:multi,0:A.shape[1]:multi]
+    # Effectue l'interpolation multicarrée inverse
+    if (len(A.shape) == 2):
+        return A[0:A.shape[0]:multi,0:A.shape[1]:multi]
+    elif (len(A.shape) == 3):
+        return A[0:A.shape[0]:multi,0:A.shape[1]:multi,:]
+
 
 def maximize(img, zoom_int):
     return interpolation_bicubique_multi(img, zoom_int)
@@ -198,7 +223,7 @@ def createSel(img):
 
     #if save:
     #    path = save_label(label, band_dict['folder'])
-
+    print(coords_list)
     return coords_list
 
 
@@ -269,5 +294,6 @@ def create_plot_save_label(origin_folder, band_id = ['B04'],zoom_int = 1, save =
 
     path = 'no_path'
     if save:
-        path = save_label(label_dezoomed, band_dict['folder'])
+        save2 = input("save : T/F (can overwrite data)")
+        path = save_label(label_dezoomed, band_dict['folder']) if (save2 == 'T') else 'no_path'
     return path
