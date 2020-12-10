@@ -167,7 +167,7 @@ def maximize(img, zoom_int):
 def minimize(img, zoom_int):
     return interpolation_bicubique_inverse(img, zoom_int)
 
-def createSel(folder, band_id, index = None , save = True):
+def createSel(img):
     '''
     Parameters
     ----------
@@ -180,26 +180,26 @@ def createSel(folder, band_id, index = None , save = True):
     '''
     #cv2.startWindowThread()
     #img = cv2.imread(img)
-    band_dict = get_band(folder)
-    img = band_dict[band_id]
+    #band_dict = get_band([band_id],folder)
+    #img = band_dict[band_id]
     ROIs = cv2.selectROIs("Select the ROI : Click and drag the mouse (top left to bottom right) and press Enter, or c to cancel", img)
-    Coords_list = list()
+    coords_list = list()
     #print(ROIs)
     for ROI in ROIs:
         #imgCrop = img[int(ROI[1]):int(ROI[1]+ROI[3]), int(ROI[0]):int(ROI[0]+ROI[2])]
-        Coords_list.append([int(ROI[1]), int(ROI[1]+ROI[3]), int(ROI[0]), int(ROI[0]+ROI[2])])
+        coords_list.append([int(ROI[1]), int(ROI[1]+ROI[3]), int(ROI[0]), int(ROI[0]+ROI[2])])
         #cv2.imshow("Image", imgCrop)
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
     #print(Coords_list)
     cv2.destroyAllWindows()
 
-    label = create_label(img, coords_list, label_on_source_image)
+    #label = create_label(img, coords_list, False)
 
-    if save:
-        path = save_label(label, band_dict['folder'])
+    #if save:
+    #    path = save_label(label, band_dict['folder'])
 
-    return Coords_list
+    return coords_list
 
 
 def create_label(img, coords_list, label_on_source_image = False):
@@ -244,7 +244,30 @@ def plot_label_vs_image(image, save = True):
     plt.imshow(image+label_dezoomed)
     plt.show()
 
-
-
-
     return label
+
+def create_plot_save_label(origin_folder, band_id = ['B04'],zoom_int = 1, save = True, index = False):
+    band_dict = get_band(band_id,origin_folder)
+    img = band_dict[band_id[0]]
+    if index:
+        img = get_FDI(origin_folder)
+        print("FDI")
+    image_zoomed = maximize(img, zoom_int)
+    coords_list = createSel(image_zoomed)
+    label = create_label(image_zoomed, coords_list, False)
+    label_dezoomed = minimize(label, zoom_int)
+    plt.figure(figsize=(15,15))
+    plt.subplot(2, 2, 1)
+    plt.imshow(img)
+    plt.subplot(2, 2, 2)
+    plt.imshow(label_dezoomed)
+    plt.subplot(2, 2, 3)
+    plt.imshow(label_dezoomed)
+    plt.subplot(2, 2, 4)
+    plt.imshow(img+label_dezoomed)
+    plt.show()
+
+    path = 'no_path'
+    if save:
+        path = save_label(label_dezoomed, band_dict['folder'])
+    return path
