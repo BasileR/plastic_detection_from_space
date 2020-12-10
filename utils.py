@@ -18,38 +18,40 @@ def get_band(L,folder):
     '''
     Parameters
     ----------
-    L : Liste de str, indiquant les bandes pectrales à utiliser.
-        exemple : L = ['B08','BO4']
-    folder : Str, Indiquant le nom du dossier dans lequel chercher. Un dossier
-        correspondant à une date et un lieu de capture de d'une image.
+    L : string list pointing to the spectral bands to use.
+        example : L = ['B08','BO4','True_color']
+        'True_color' is the RGB image
+    folder : String pointing to the name of the folder to search. Each folder
+        have the spectral bands of an image for a given date and place
         exemple : '2019_04_18_M'
 
     Returns
     -------
-    band_dict : Dictionnaire de np.array(), 1 array pour 1 bande spectrale
-        dont les coefficients sont les réflectivités normalisées pour la bande
-        spectrale considérée
+    band_dict : dictionnary of np.array(), 1 array pour 1 spectral band
+        where coeff are  normalizaed reflectivies for the considered spectral
+        bands
         exemple : band_dict = {'B08' : array, 'B04' : 'array'}
 
     '''
-    ## Test pour assurer le bon fonctionnement de la fonction
+    ## Test of the parameters
     if len(L) == 0  or type(L) != list:
-        raise TypeError("L n'est pas une liste, ou L est vide.")
+        raise TypeError("L is not a list, or is empty")
     if type(folder) != str:
-        raise TypeError("folder n'est pas un str.")
+        raise TypeError("folder is not a string")
 
-    ## Obtention des chemins pour charger les bandes spectrales
+    ## get paths to load spectral bands
     path = 'data/'+ folder
     inside_folder = os.listdir(path)
 
     band_dict = {}
 
-    ## Chargement des bandes spectrales désirées
+    ## load wanted spectral bands
     for raw_band in inside_folder:
         for desired_band in L:
             if desired_band in raw_band:
                 band_dict[desired_band] = tifffile.imread(os.path.join(path,raw_band))
 
+    ## add the name of the folder to the dict
     band_dict['folder'] = folder
 
     return band_dict
@@ -60,15 +62,15 @@ def get_FDI(folder):
     '''
     Parameters
     ----------
-    folder : nom du dossier désiré pour les bandes spectrales
+    folder : name of the target folder (date,place) to find spectral bands
 
     Returns
     -------
-    FDI : Calcule le FDI (Floating Debris Index) et le retourne sous forme
-        d'un array de même dimension que arrays en entrée.
+    FDI : Calculate FDI (Floating Debris Index) and returns it as an array with
+    the same size of the spectral bands.
 
     '''
-    ## valeurs des longueurs d'ondes de B08, B04 et B11 nécessaires au calcul
+    ## Some wavelenghts that are required (B08,B04,B11)
     lambda_8 = 833.8
     lambda_4 = 664.6
     lambda_11 = 1613.7
@@ -77,11 +79,12 @@ def get_FDI(folder):
 
     band_dict = get_band(required_band,folder)
 
-    ## Test si toutes les bandes requises sont chargées dans band_dict
+    ## Test if every band is loaded in the dict
     for band in required_band:
         if band not in list(band_dict.keys()):
-            raise ValueError('Band_dict ne contient pas les bandes requises\
-                             pour le FDI, required_band = [B08,B11,B06]')
+            raise ValueError('Band_dict does not contain required band for FDI\
+                             required_band = [B08,B11,B06]')
+    ## load bands
     B08 = band_dict['B08']
     B11 = band_dict['B11']
     B06 = band_dict['B06']
@@ -92,22 +95,25 @@ def get_PI(folder):
     '''
     Parameters
     ----------
-    folder : nom du dossier désiré pour les bandes spectrales
+    folder : name of the target folder (date,place) to find spectral bands
 
     Returns
     -------
-    PI : Calcule le PI (Plastic Index) et le retourne sous forme
-        d'un array de même dimension que arrays en entrée.
+    FDI : Calculate PI (Plastic Index) and returns it as an array with
+    the same size of the spectral bands.
+
     '''
     required_band = ['B08','B04']
 
     band_dict = get_band(required_band,folder)
 
-    ## Test si toutes les bandes requises sont chargées dans band_dict
+    ## Test if every band is loaded in the dict
     for band in required_band:
         if band not in list(band_dict.keys()):
-            raise ValueError('Band_dict ne contient pas les bandes requises pour le PI, required_band = [B08,B04]')
+            raise ValueError('Band_dict does not contain required band for PI\
+                             required_band = [B08,B04]')
 
+    ## load bands
     B08 = band_dict['B08']
     B04 = band_dict['B04']
 
@@ -118,23 +124,25 @@ def get_RNDVI(folder):
     '''
     Parameters
     ----------
-    folder : nom du dossier désiré pour les bandes spectrales
+    folder : name of the target folder (date,place) to find spectral bands
 
     Returns
     -------
-    RNDVI : Calcule le RNDVI (Floating Debris Index) et le retourne sous forme
-        d'un array de même dimension que arrays en entrée.
+    FDI : Calculate RNDVI and returns it as an array with
+    the same size of the spectral bands.
+
     '''
     required_band = ['B08','B04']
 
     band_dict = get_band(required_band,folder)
 
-    ## Test si toutes les bandes requises sont chargées dans band_dict
+    ## Test if every band is loaded in the dict
     for band in required_band:
         if band not in list(band_dict.keys()):
-            raise ValueError('Band_dict ne contient pas les bandes requises \
-                             pour le RNDVI, required_band = [B08,B04]')
+            raise ValueError('Band_dict does not contain required band for RNDVI\
+                             required_band = [B08,B04]')
 
+    ## load bands
     B08 = band_dict['B08']
     B04 = band_dict['B04']
 
