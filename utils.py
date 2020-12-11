@@ -180,7 +180,7 @@ def interpolation_multicubique(A, multi):
     B : numpy array, with its first two dimensions aumgented by the coefficient
     multi -> B of dimension (m*multi, n*multi) or (m*multi, n*multi, t) if 3D
     """
-    
+
     if (type(A) != np.ndarray):
         raise TypeError("L'argument n'est pas un ndarray")
     if (len(A.shape) == 2):
@@ -299,7 +299,10 @@ def plot_label_vs_image(image, save = True):
     plt.imshow(image+label_dezoomed)
     plt.show()
 
-    return label
+    if len(label.shape) == 3:
+        return label[:,:,0]
+    else:
+        return label
 
 def create_plot_save_label(origin_folder, band_id = ['B04'],zoom_int = 1, save = True, index = False):
     band_dict = get_band(band_id,origin_folder)
@@ -327,3 +330,34 @@ def create_plot_save_label(origin_folder, band_id = ['B04'],zoom_int = 1, save =
         save2 = input("save : T/F (can overwrite data)")
         path = save_label(label_dezoomed, band_dict['folder']) if (save2 == 'T') else 'no_path'
     return path
+
+def get_batch(bands, folder, all = False):
+    L = bands
+    if all:
+        L = ['B01','B02','B03','B04','B04','B05','B06','B07','B08','B8A','B09','B11','B12']
+    if len(L)==0:
+        raise ValueError("L is empty : bands null and all=False.")
+    band_dict = get_band(L, folder)
+
+    ## get paths to label
+    path = 'data/label/'
+    inside_folder = os.listdir(path)
+
+    label = None
+    labelfound= False
+    for file in inside_folder:
+        if folder in file:
+            labelfound = True
+            label = tifffile.imread(path+file)
+    if labelfound == False:
+        raise ValueError("The label for this file does not exist, please create it using 'create_plot_save_label'.")
+
+    m,n = band_dict[list(band_dict.keys())[0]].shape
+    table = np.zeros((m,n,len(L)))
+    for i, id in enumerate(L):
+        table[:,:,i] = band_dict[id]
+
+    if len(label.shape) == 3:
+        return table, label[:,:,0]
+    else:
+        return table, label
