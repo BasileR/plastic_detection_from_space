@@ -249,7 +249,15 @@ def createSel(img):
     return coords_list
 
 
-def create_label(img, coords_list, label_on_source_image = False):
+def create_label(img, coords_list):
+    '''
+    Params:
+    img : numpy array the image to label
+    coords_list : list of coordinates found is the function createSel
+
+    Returns:
+    path: numpy array representing the label (1 for plastic and 0 for other)
+    '''
     label = np.zeros(img.shape)
     if label_on_source_image:
         label = img.copy()
@@ -305,6 +313,21 @@ def plot_label_vs_image(image, save = True):
         return label
 
 def create_plot_save_label(origin_folder, band_id = ['B04'],zoom_int = 1, save = True, index = False):
+    '''
+    Function to create a label by selecting pixels 'by hands'.
+
+    Parameters
+    ----------
+    origin_folder : origin folder of the image to label, ex : '2019_04_18_M'
+    band_id : list of strings, id of the desired spectral bands
+    zoom_int : zoom the plotted image
+    save : True to save the created label
+    index : True if you want to create your label with FDI index
+
+    Returns
+    ----------
+    path : string, path where the label is saved.
+    '''
     band_dict = get_band(band_id,origin_folder)
     img = band_dict[band_id[0]]
     if index:
