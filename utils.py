@@ -384,3 +384,33 @@ def get_batch(bands, folder, all = False):
         return table, label[:,:,0]
     else:
         return table, label
+
+def get_simplastic_v1():
+
+    path = 'data/Mytilene/simplastic_v1'
+    path_patchM1 = path +'/M1'+'/patch'
+    path_labelM1 = path +'/M1'+'/label'
+
+    path_patchM2 = path +'/M2'+'/patch'
+    path_labelM2 = path +'/M2'+'/label'
+
+    sizeM1 = len(os.listdir(path +'/M1'+'/patch'))
+    sizeM2 = len(os.listdir(path +'/M2'+'/patch'))
+
+    patch_list = []
+    label_list = []
+
+
+    for i in range(sizeM1):
+        patch = tifffile.imread(path_patchM1 + '/patch_{}_{}.tif'.format('M1',i))
+        label = tifffile.imread(path_labelM1 + '/label_{}_{}.tif'.format('M1',i))
+        patch_list.append(patch)
+        label_list.append(label)
+
+    for i in range(sizeM2):
+        patch = tifffile.imread(path_patchM2 + '/patch_{}_{}.tif'.format('M2',i))
+        label = tifffile.imread(path_labelM2 + '/label_{}_{}.tif'.format('M2',i))
+        patch_list.append(patch)
+        label_list.append(label)
+
+    return patch_list, label_list
