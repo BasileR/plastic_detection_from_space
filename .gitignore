@@ -4,6 +4,9 @@ __pycache__/*
 __pycache__/
 /__pycache__/
 
+data/Mytilene/*
+data/Mytilene/
+
 __Mytilene__/*
 __Mytilene__/
 /__pycache__/
