@@ -8,6 +8,10 @@ __pycache__/
 __pycache__/
 *.py[cod]
 
+data/Mytilene/*
+data/Mytilene/
+/data/Mytilene/
+
 # C extensions
 *.so
 
