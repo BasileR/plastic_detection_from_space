@@ -12,6 +12,11 @@ data/Mytilene/*
 data/Mytilene/
 /data/Mytilene/
 
+data/planet/*
+data/planet/
+/data/planet/
+
+
 # C extensions
 *.so
 
