@@ -22,6 +22,8 @@ pip install name_of_the_module
 
 Each notebook is self explanatory. A description is provided at the top of each notebook. Let us give a brief recap of their content here :
 
-* 1
-* 2
-* 3
+* Tests_hypothese_Alina.ipynb : Hypothesis tests
+* Detection_image_signature_spectrale_Alina (1).ipynb : Spectral Unmixing
+* Anomaly_detection_Gaspard.ipynb : Anomaly Detection, introduction for Hypothesis tests
+* Plastic supervised learning.ipynb
+* Plastic supervised learning - Nordin.ipynb
