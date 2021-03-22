@@ -27,3 +27,4 @@ Each notebook is self explanatory. A description is provided at the top of each 
 * Anomaly_detection_Gaspard.ipynb : Anomaly Detection, introduction for Hypothesis tests
 * Plastic supervised learning.ipynb
 * Plastic supervised learning - Nordin.ipynb
+* Image_Gaspard.ipynb
