@@ -10,10 +10,10 @@ This branch groups together all the commented codes that have been developped an
 
 Each notebook is self explanatory. A description is provided at the top of each notebook. Let us give a brief recap of their content here :
 
-* Plastic Spectral Unmixing : Algorithms using spectral unmixing techniques with K-means for clustering. 
-* Test_hypothese_Alina      : Algorothms using Statistical testing for plastic detection
-* Plastic supervised learning : Algoithms based on supervised learning more specifically KNN and Naive Bayes 
-* Graphs 		    : Codes for detection with graph theory
+* Plastic Spectral Unmixing   : Algorithms using spectral unmixing techniques with K-means for clustering. 
+* Test_hypothese_Alina        : Statistical testing for plastic detection
+* Plastic supervised learning : Algorithms based on supervised learning more specifically KNN and Naive Bayes 
+* Graphs 		                  : Codes for detection with graph theory
 + a report that explains our project with more details 
 
 ### How to use utils to run the notebooks
